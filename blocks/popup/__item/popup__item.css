@@ -1,0 +1,15 @@
+.popup__item {
+  border: 0;
+  height: 27px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: transparent;
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 30px;
+}
+@media screen and (max-width: 320px) {
+  .popup__item {
+    margin-bottom: 30px;
+  }
+}

@@ -1,0 +1,10 @@
+.elements__item {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #fff;
+  height: 361px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
