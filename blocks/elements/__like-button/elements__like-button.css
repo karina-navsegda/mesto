@@ -1,0 +1,12 @@
+.elements__like-button {
+  border: none;
+  background-color: #fff;
+  width: 22;
+  height: 19;
+  fill: none;
+}
+
+.elements__like-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
