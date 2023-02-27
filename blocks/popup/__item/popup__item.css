@@ -6,7 +6,11 @@
   background-color: transparent;
   font-size: 14px;
   font-family: inherit;
+  margin: 0;
   margin-bottom: 30px;
+  width: 100%;
+  line-height: 17px;
+  padding-bottom: 10px;
 }
 @media screen and (max-width: 320px) {
   .popup__item {
