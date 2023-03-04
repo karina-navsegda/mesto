@@ -5,11 +5,18 @@
   height: 74px;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 940px) {
+  .header {
+    width: calc(100% - 76px);
+    margin-top: 28px;
+    height: 56px;
+    margin-bottom: 42px;
+  }
+}
+
+@media screen and (max-width: 440px) {
   .header {
     margin-top: 28px;
-    margin-bottom: 42px;
-    height: 56px;
     width: 100%;
   }
 }
