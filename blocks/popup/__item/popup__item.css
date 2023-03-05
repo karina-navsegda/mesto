@@ -12,7 +12,7 @@
   line-height: 17px;
   padding-bottom: 10px;
 }
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 620px) {
   .popup__item {
     margin-bottom: 30px;
   }
