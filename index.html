@@ -28,74 +28,7 @@
         </div>
         <button class="profile__add-button" type="button"></button>
       </section>
-      <section class="elements">
-        <div class="elements__item">
-          <img
-            class="elements__photo"
-            alt="Домбай"
-            src="./images/kirill-pershin-1088404-unsplash.png"
-          />
-          <div class="elements__discription">
-            <h2 class="elements__title">Домбай</h2>
-            <button class="elements__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="elements__item">
-          <img
-            class="elements__photo"
-            alt="Гора Эльбрус"
-            src="./images/kirill-pershin-1404681-unsplash.png"
-          />
-          <div class="elements__discription">
-            <h2 class="elements__title">Гора Эльбрус</h2>
-            <button class="elements__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="elements__item">
-          <img
-            class="elements__photo"
-            alt="Карачаевск"
-            src="./images/kirill-pershin-1556355-unsplash.png"
-          />
-          <div class="elements__discription">
-            <h2 class="elements__title">Карачаевск</h2>
-            <button class="elements__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="elements__item">
-          <img
-            class="elements__photo"
-            alt="Домбай"
-            src="./images/kirill-pershin-1088404-unsplash.png"
-          />
-          <div class="elements__discription">
-            <h2 class="elements__title">Домбай</h2>
-            <button class="elements__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="elements__item">
-          <img
-            class="elements__photo"
-            alt="Гора Эльбрус"
-            src="./images/kirill-pershin-1404681-unsplash.png"
-          />
-          <div class="elements__discription">
-            <h2 class="elements__title">Гора Эльбрус</h2>
-            <button class="elements__like-button" type="button"></button>
-          </div>
-        </div>
-        <div class="elements__item">
-          <img
-            class="elements__photo"
-            alt="Карачаево-Черкесия"
-            src="./images/kirill-pershin-1556355-unsplash.png"
-          />
-          <div class="elements__discription">
-            <h2 class="elements__title">Карачаевo-Черкесия</h2>
-            <button class="elements__like-button" type="button"></button>
-          </div>
-        </div>
-      </section>
+      <section class="elements"></section>
     </main>
     <footer class="footer">
       <p class="footer__text">© 2020 Mesto Russia</p>
@@ -125,6 +58,52 @@
         </form>
       </div>
     </div>
+    <template class="template">
+      <div class="elements__item">
+        <button class="elements__delete-button" type="button"></button>
+        <img class="elements__photo" />
+        <div class="elements__discription">
+          <h2 class="elements__title">Карачаевo-Черкесия</h2>
+          <button class="elements__like-button" type="button"></button>
+        </div>
+      </div>
+    </template>
+
+    <div class="popup-place">
+      <div class="popup__container">
+        <button class="popup__close" type="button">
+          <img class="popup__svg" src="./images/CloseIcon.svg" alt="закрыть" />
+        </button>
+        <h2 class="popup__title">Новое место</h2>
+        <form class="popup__form" name="edit__form" method="post">
+          <input
+            type="text"
+            class="popup__item popup__item_type_place-name"
+            placeholder="Название"
+            value=""
+            name="edit__username"
+          />
+          <input
+            type="text"
+            class="popup__item popup__item_type_link"
+            placeholder="Ссылка на картинку"
+            value=""
+            name="edit__description"
+          />
+          <button class="popup__button" type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+    <div class="zoom">
+      <div class="zoom__items">
+        <img class="zoom__photo" alt="" src="#">
+        <h2 class="zoom__title"></h2>
+        <button class="popup__close zoom__close-button" type="button">
+          <img class="popup__svg" src="./images/CloseIcon.svg" alt="закрыть" />
+        </button>
+      </div>
+    </div>
+
     <script src="./scripts/index.js"></script>
   </body>
 </html>
