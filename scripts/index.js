@@ -1,34 +1,40 @@
-let popup = document.querySelector(".popup");
-let popupPlace = document.querySelector(".popup-place");
+const popup = document.querySelector(".popup");
 
-let openPopupButton = document.querySelector(".profile__edit-button");
-let closePopupButton = document.querySelector(".popup__close");
-let closePopupPlaceButton = popupPlace.querySelector(".popup__close");
-let formElement = document.querySelector(".popup__form");
+const popupEdit = document.querySelector(".popup-edit");
+const popupPlace = document.querySelector(".popup-place");
 
-let nameInput = document.querySelector(".popup__item_type_username");
-let jobInput = document.querySelector(".popup__item_type_description");
+const openPopupButton = document.querySelector(".profile__edit-button");
+const closePopupButton = document.querySelector(".popup__close");
+const closePopupPlaceButton = popupPlace.querySelector(".popup__close");
+const addPopupButton = document.querySelector(".profile__add-button");
+const formElement = document.querySelector(".popup__form");
 
-let profileName = document.querySelector(".profile__name");
-let jobName = document.querySelector(".profile__subtitle");
+const nameInput = document.querySelector(".popup__item_type_username");
+const jobInput = document.querySelector(".popup__item_type_description");
 
-let addPopupButton = document.querySelector(".profile__add-button");
+const profileName = document.querySelector(".profile__name");
+const jobName = document.querySelector(".profile__subtitle");
 
-let imgInput = document.querySelector(".popup__item_type_link");
-let placeName = document.querySelector(".popup__item_type_place-name");
+const imgInput = document.querySelector(".popup__item_type_link");
+const placeName = document.querySelector(".popup__item_type_place-name");
 
-let cardTitle = document.querySelector(".elements__title");
-let cardLink = document.querySelector(".elements__photo");
+const cardTitle = document.querySelector(".elements__title");
+const cardLink = document.querySelector(".elements__photo");
 
-let formElementPlace = popupPlace.querySelector(".popup__form");
+const formElementPlace = popupPlace.querySelector(".popup__form");
 
-function openPopup() {
-  popup.classList.add("popup_opened");
+function openPopup(popupName) {
+  popupName.classList.add('popup_opened');
+}
+
+function closePopup(popupName) {
+  popupName.classList.remove('popup_opened');
+}
+
+function openPopupEdit() {
+  openPopup(popupEdit);
   nameInput.value = profileName.textContent;
   jobInput.value = jobName.textContent;
-}
-function closePopup() {
-  popup.classList.remove("popup_opened");
 }
 
 function handleFormSubmit(evt) {
@@ -37,39 +43,44 @@ function handleFormSubmit(evt) {
   profileName.textContent = nameInput.value;
   jobName.textContent = jobInput.value;
 
-  closePopup();
+  closePopup(popupEdit);
 }
 
 const initialCards = [
   {
     name: "Архыз",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+    alt: "Архыз",
   },
   {
     name: "Челябинская область",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
+    alt: "Челябинская область",
   },
   {
     name: "Иваново",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
+    alt:   "Иваново",
   },
   {
     name: "Камчатка",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
+    alt: "Камчатка",
   },
   {
     name: "Холмогорский район",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
+    alt: "Холмогорский район",
   },
   {
     name: "Байкал",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
+    alt: "Байкал",
   },
 ];
 
 const page = document.querySelector(".elements");
 
-// initialCards.forEach(function createCard(card) {
 function createCard(card) {
   const newCard = document.querySelector(".template").content.cloneNode(true);
   const cardHeading = newCard.querySelector(".elements__title");
@@ -79,9 +90,9 @@ function createCard(card) {
   const likeCardButton = newCard.querySelector(".elements__like-button");
   likeCardButton.addEventListener("click", likeCard);
   cardImage.setAttribute("src", card.link);
+  cardImage.setAttribute('alt', card.alt)
   deleteCardButton.addEventListener("click", deleteCard);
   cardImage.addEventListener("click", zoomIn);
-  // page.append(newCard);
   return newCard;
 }
 
@@ -103,13 +114,6 @@ function deleteCard(evt) {
   evt.target.closest(".elements__item").remove();
 }
 
-function openPopupPlace() {
-  popupPlace.classList.add("popup_opened");
-}
-
-function closePopupPlace() {
-  popupPlace.classList.remove("popup_opened");
-}
 function addNewCard(evt) {
   evt.preventDefault();
   const cardTitle = placeName.value;
@@ -118,25 +122,34 @@ function addNewCard(evt) {
   const newCard = {
     name: cardTitle,
     link: cardLink,
+    alt: cardTitle,
   };
   renderCard(newCard, page);
-  closePopupPlace();
+  closePopup(popupPlace);
+  placeName.value = '';
+  imgInput.value = '';
 }
 
-openPopupButton.addEventListener("click", openPopup);
-closePopupButton.addEventListener("click", closePopup);
+openPopupButton.addEventListener("click", openPopupEdit);
+closePopupButton.addEventListener("click", function() {
+  closePopup(popupEdit);
+});
 formElement.addEventListener("submit", handleFormSubmit);
 
-closePopupPlaceButton.addEventListener("click", closePopupPlace);
-addPopupButton.addEventListener("click", openPopupPlace);
+closePopupPlaceButton.addEventListener("click", function() {
+  closePopup(popupPlace);
+});;
+addPopupButton.addEventListener("click", function() {
+  openPopup(popupPlace);
+});;
 formElementPlace.addEventListener("submit", addNewCard);
 
-const zoomPopup = document.querySelector(".zoom");
+const zoomPopup = document.querySelector(".popup-zoom");
 const zoomImg = document.querySelector(".zoom__photo");
 const zoomTitile = document.querySelector(".zoom__title");
 
 function zoomIn(evt) {
-  zoomPopup.classList.add("popup_opened");
+  openPopup(zoomPopup);
   zoomImg.src = evt.target.src;
   const cardName = evt.target
     .closest(".elements__item")
@@ -146,8 +159,6 @@ function zoomIn(evt) {
 
 const zoomClose = document.querySelector(".zoom__close-button");
 
-function closeZoom() {
-  zoomPopup.classList.remove("popup_opened");
-}
-
-zoomClose.addEventListener("click", closeZoom);
+zoomClose.addEventListener("click", function() {
+  closePopup(zoomPopup);
+});
