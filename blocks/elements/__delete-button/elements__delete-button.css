@@ -9,3 +9,8 @@
   padding: 0;
   background-image: url(../../../images/trash-icon.svg);
 }
+
+.elements__delete-button:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
