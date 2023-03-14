@@ -145,8 +145,8 @@ addPopupButton.addEventListener("click", function() {
 formElementPlace.addEventListener("submit", addNewCard);
 
 const zoomPopup = document.querySelector(".popup-zoom");
-const zoomImg = document.querySelector(".zoom__photo");
-const zoomTitile = document.querySelector(".zoom__title");
+const zoomImg = document.querySelector(".popup-zoom__photo");
+const zoomTitile = document.querySelector(".popup-zoom__title");
 
 function zoomIn(evt) {
   openPopup(zoomPopup);
@@ -157,7 +157,7 @@ function zoomIn(evt) {
   zoomTitile.textContent = cardName;
 }
 
-const zoomClose = document.querySelector(".zoom__close-button");
+const zoomClose = document.querySelector(".popup-zoom__close-button");
 
 zoomClose.addEventListener("click", function() {
   closePopup(zoomPopup);
