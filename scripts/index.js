@@ -1,4 +1,5 @@
 const popup = document.querySelector(".popup");
+const popupAll = document.querySelectorAll('.popup')
 
 const popupEdit = document.querySelector(".popup-edit");
 const popupPlace = document.querySelector(".popup-place");
@@ -25,10 +26,12 @@ const formElementPlace = popupPlace.querySelector(".popup__form");
 
 function openPopup(popupName) {
   popupName.classList.add('popup_opened');
+  document.addEventListener("keydown", escapeClose);
 }
 
 function closePopup(popupName) {
   popupName.classList.remove('popup_opened');
+  document.addEventListener("keydown", escapeClose);
 }
 
 function openPopupEdit() {
@@ -46,7 +49,16 @@ function handleFormSubmit(evt) {
   closePopup(popupEdit);
 }
 
-const initialCards = [
+function escapeClose(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_opened");
+    if (openedPopup) {
+      closePopup(openedPopup);
+    }
+  }
+}
+
+ const initialCards = [
   {
     name: "Архыз",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
@@ -144,6 +156,15 @@ addPopupButton.addEventListener("click", function() {
 });;
 formElementPlace.addEventListener("submit", addNewCard);
 
+popupAll.forEach((popup) => {
+  popup.addEventListener("click", (event) => {
+    if (event.target === popup) {
+      popup.classList.remove("popup_opened");
+    }
+  });
+});
+
+
 const zoomPopup = document.querySelector(".popup-zoom");
 const zoomImg = document.querySelector(".popup-zoom__photo");
 const zoomTitile = document.querySelector(".popup-zoom__title");
@@ -162,3 +183,4 @@ const zoomClose = document.querySelector(".popup-zoom__close-button");
 zoomClose.addEventListener("click", function() {
   closePopup(zoomPopup);
 });
+
