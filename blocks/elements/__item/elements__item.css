@@ -1,5 +1,5 @@
 .elements__item {
-  width: 100%;
+  max-width: 282px;
   overflow: hidden;
   border-radius: 10px;
   background-color: #fff;

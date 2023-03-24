@@ -1,5 +1,5 @@
 const popup = document.querySelector(".popup");
-const popupAll = document.querySelectorAll('.popup')
+const popupAll = document.querySelectorAll(".popup");
 
 const popupEdit = document.querySelector(".popup-edit");
 const popupPlace = document.querySelector(".popup-place");
@@ -8,7 +8,7 @@ const openPopupButton = document.querySelector(".profile__edit-button");
 const closePopupButton = document.querySelector(".popup__close");
 const closePopupPlaceButton = popupPlace.querySelector(".popup__close");
 const addPopupButton = document.querySelector(".profile__add-button");
-const formElement = document.querySelector(".popup__form");
+const formEditProfile = document.querySelector(".popup__form");
 
 const nameInput = document.querySelector(".popup__item_type_username");
 const jobInput = document.querySelector(".popup__item_type_description");
@@ -23,15 +23,17 @@ const cardTitle = document.querySelector(".elements__title");
 const cardLink = document.querySelector(".elements__photo");
 
 const formElementPlace = popupPlace.querySelector(".popup__form");
+const popupButton = popupPlace.querySelector(".popup__button");
 
 function openPopup(popupName) {
-  popupName.classList.add('popup_opened');
+  popupName.classList.add("popup_opened");
   document.addEventListener("keydown", escapeClose);
 }
 
 function closePopup(popupName) {
-  popupName.classList.remove('popup_opened');
+  popupName.classList.remove("popup_opened");
   document.addEventListener("keydown", escapeClose);
+  disableButton(popupButton, validationConfig);
 }
 
 function openPopupEdit() {
@@ -40,7 +42,7 @@ function openPopupEdit() {
   jobInput.value = jobName.textContent;
 }
 
-function handleFormSubmit(evt) {
+function submitEditProfilePopup(evt) {
   evt.preventDefault();
 
   profileName.textContent = nameInput.value;
@@ -58,7 +60,7 @@ function escapeClose(evt) {
   }
 }
 
- const initialCards = [
+const initialCards = [
   {
     name: "Архыз",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
@@ -72,7 +74,7 @@ function escapeClose(evt) {
   {
     name: "Иваново",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-    alt:   "Иваново",
+    alt: "Иваново",
   },
   {
     name: "Камчатка",
@@ -102,7 +104,7 @@ function createCard(card) {
   const likeCardButton = newCard.querySelector(".elements__like-button");
   likeCardButton.addEventListener("click", likeCard);
   cardImage.setAttribute("src", card.link);
-  cardImage.setAttribute('alt', card.alt)
+  cardImage.setAttribute("alt", card.alt);
   deleteCardButton.addEventListener("click", deleteCard);
   cardImage.addEventListener("click", zoomIn);
   return newCard;
@@ -138,32 +140,31 @@ function addNewCard(evt) {
   };
   renderCard(newCard, page);
   closePopup(popupPlace);
-  placeName.value = '';
-  imgInput.value = '';
+  placeName.value = "";
+  imgInput.value = "";
 }
 
 openPopupButton.addEventListener("click", openPopupEdit);
-closePopupButton.addEventListener("click", function() {
+closePopupButton.addEventListener("click", function () {
   closePopup(popupEdit);
 });
-formElement.addEventListener("submit", handleFormSubmit);
+formEditProfile.addEventListener("submit", submitEditProfilePopup);
 
-closePopupPlaceButton.addEventListener("click", function() {
+closePopupPlaceButton.addEventListener("click", function () {
   closePopup(popupPlace);
-});;
-addPopupButton.addEventListener("click", function() {
+});
+addPopupButton.addEventListener("click", function () {
   openPopup(popupPlace);
-});;
+});
 formElementPlace.addEventListener("submit", addNewCard);
 
 popupAll.forEach((popup) => {
   popup.addEventListener("click", (event) => {
     if (event.target === popup) {
-      popup.classList.remove("popup_opened");
+      closePopup(popup);
     }
   });
 });
-
 
 const zoomPopup = document.querySelector(".popup-zoom");
 const zoomImg = document.querySelector(".popup-zoom__photo");
@@ -172,6 +173,8 @@ const zoomTitile = document.querySelector(".popup-zoom__title");
 function zoomIn(evt) {
   openPopup(zoomPopup);
   zoomImg.src = evt.target.src;
+  const cardAlt = evt.target.getAttribute("alt");
+  zoomImg.setAttribute("alt", cardAlt);
   const cardName = evt.target
     .closest(".elements__item")
     .querySelector(".elements__title").textContent;
@@ -180,7 +183,6 @@ function zoomIn(evt) {
 
 const zoomClose = document.querySelector(".popup-zoom__close-button");
 
-zoomClose.addEventListener("click", function() {
+zoomClose.addEventListener("click", function () {
   closePopup(zoomPopup);
 });
-
