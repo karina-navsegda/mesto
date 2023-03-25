@@ -23,7 +23,7 @@ const cardTitle = document.querySelector(".elements__title");
 const cardLink = document.querySelector(".elements__photo");
 
 const formElementPlace = popupPlace.querySelector(".popup__form");
-const popupButton = popupPlace.querySelector(".popup__button");
+const buttonSubmitAddCardForm = popupPlace.querySelector(".popup__button");
 
 function openPopup(popupName) {
   popupName.classList.add("popup_opened");
@@ -33,7 +33,6 @@ function openPopup(popupName) {
 function closePopup(popupName) {
   popupName.classList.remove("popup_opened");
   document.addEventListener("keydown", escapeClose);
-  disableButton(popupButton, validationConfig);
 }
 
 function openPopupEdit() {
@@ -142,6 +141,7 @@ function addNewCard(evt) {
   closePopup(popupPlace);
   placeName.value = "";
   imgInput.value = "";
+  disableButton(buttonSubmitAddCardForm, validationConfig);
 }
 
 openPopupButton.addEventListener("click", openPopupEdit);
