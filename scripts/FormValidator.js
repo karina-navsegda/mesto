@@ -50,10 +50,6 @@ export class FormValidator {
   }
 
   _setEventListeners() {
-    this._formElement.addEventListener("submit", (evt) => {
-      evt.preventDefault();
-    });
-
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(inputElement);
@@ -68,18 +64,3 @@ export class FormValidator {
     this._setEventListeners();
   }
 }
-
-export const enableValidation = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__item",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_inactive",
-  inputErrorClass: "popup__item_type_error",
-  errorClass: "popup__input-error_active",
-};
-
-const formElements = document.querySelectorAll(enableValidation.formSelector);
-formElements.forEach((formElement) => {
-  const formValidator = new FormValidator(enableValidation, formElement);
-  formValidator.enableValidation();
-});
