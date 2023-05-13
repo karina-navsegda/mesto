@@ -1,5 +1,5 @@
 export class Card {
-  constructor(data, templateSelector) {
+  constructor(data, templateSelector, handleOpenPopup) {
     this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
@@ -11,9 +11,9 @@ export class Card {
       ".elements__delete-button"
     );
     this._zoomPopupButton = this._cardElement.querySelector(".elements__photo");
-    this._zoomImg = document.querySelector(".popup-zoom__photo");
-    this._zoomTitle = document.querySelector(".popup-zoom__title");
-    this._zoomPopup = document.querySelector(".popup-zoom");
+
+    this._handleOpenPopup= handleOpenPopup;
+
   }
 
   _getTemplate() {
@@ -34,9 +34,9 @@ export class Card {
       this._handleDeleteCard();
     });
 
-    this._zoomPopupButton.addEventListener("click", () => {
-      this._handleOpenPopup();
-    });
+    this._zoomPopupButton.addEventListener('click', () =>{ 
+      this._handleOpenPopup(this._name, this._link) 
+    });  
   }
 
   _handleLikeIcon() {
@@ -47,18 +47,11 @@ export class Card {
     this._cardElement.remove();
   }
 
-  _handleOpenPopup() {
-    this._zoomImg.src = this._link;
-    this._zoomImg.alt = this._name;
-    this._zoomTitle.textContent = this._name;
-    this._zoomPopup.classList.add("popup_opened");
-  }
-
   generateCard() {
     this._setEventListeners();
 
-    this._cardElement.querySelector(".elements__photo").src = this._link;
-    this._cardElement.querySelector(".elements__photo").alt = this._name;
+    this._zoomPopupButton.src = this._link;
+    this._zoomPopupButton.alt = this._name;
     this._cardElement.querySelector(".elements__title").textContent =
       this._name;
 
