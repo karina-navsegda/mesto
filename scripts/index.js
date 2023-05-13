@@ -1,6 +1,7 @@
 import { Card } from "./Cards.js";
 import { FormValidator } from "./FormValidator.js";
 
+
 const popupAll = document.querySelectorAll(".popup");
 
 const popupEdit = document.querySelector(".popup-edit");
@@ -62,12 +63,11 @@ function closePopup(popupName) {
 function openPopupEdit() {
 
   openPopup(popupEdit);
+  editFormValidator.resetValidation();
 
   nameInput.value = profileName.textContent;
   jobInput.value = jobName.textContent;
-  
-//  editFormValidator.resetValidation();
-}
+  }
 
 function submitEditProfilePopup(evt) {
   evt.preventDefault();
@@ -135,7 +135,6 @@ function addCard(container, card) {
 }
 
 initialCards.forEach((element) => {
- // page.append(createCard(element));
  addCard(page, createCard(element));
 });
 
@@ -167,7 +166,9 @@ closePopupPlaceButton.addEventListener("click", function () {
 });
 addPopupButton.addEventListener("click", function () {
   openPopup(popupPlace);
-  console.log(cardFormValidator.resetValidation());
+  cardFormValidator.resetValidation();
+  imgInput.value = '';
+  placeName.value = '';
 });
 
 popupAll.forEach((popup) => {
