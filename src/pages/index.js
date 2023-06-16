@@ -6,38 +6,32 @@ import { Section } from "../scripts/Section.js";
 import { PopupWithForm } from "../scripts/PopupWithForm.js";
 import { UserInfo } from "../scripts/UserInfo.js";
 import { PopupWithImage } from "../scripts/PopupWithImage.js";
+import { Api } from "../scripts/Api.js";
+import { PopupWithDelete } from "../scripts/PopupWithDelete.js";
 
-const initialCards = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+const api = new Api({
+  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-68",
+  headers: {
+    authorization: "e00d62af-84dc-4f42-9fe9-f9707f668d85",
+    "Content-Type": "application/json",
   },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
+});
+
+api.getProfile().then((res) => {
+  userInfo.setUserInfo({
+    name: res.name,
+    about: res.about,
+    avatar: res.avatar,
+  });
+});
+
 const popupEdit = document.querySelector(".popup-edit");
 const popupPlace = document.querySelector(".popup-place");
+const popupAvatar = document.querySelector(".popup-profile");
 
 const popupEditOpenButton = document.querySelector(".profile__edit-button");
 const popupAddButton = document.querySelector(".profile__add-button");
+const popupNewAvatar = document.querySelector(".profile__overlay-button");
 
 const nameInput = document.querySelector(".popup__item_type_username");
 const jobInput = document.querySelector(".popup__item_type_description");
@@ -60,6 +54,9 @@ editFormValidator.enableValidation();
 const cardFormValidator = new FormValidator(validationEnable, popupPlace);
 cardFormValidator.enableValidation();
 
+const avatarFormValidator = new FormValidator(validationEnable, popupAvatar);
+avatarFormValidator.enableValidation();
+
 function openPopupEdit() {
   popupEditProfile.open();
   editFormValidator.resetValidation();
@@ -77,14 +74,36 @@ popupAddButton.addEventListener("click", function () {
   placeName.value = "";
 });
 
+popupNewAvatar.addEventListener("click", function () {
+  popupAddAvatar.open();
+  avatarFormValidator.resetValidation();
+});
+
 const popupAddPlace = new PopupWithForm(".popup-place", handleFormSubmitCard);
 const popupEditProfile = new PopupWithForm(
   ".popup-edit",
   handleFormSubmitProfile
 );
 
+const popupAddAvatar = new PopupWithForm(
+  ".popup-profile",
+  handleFormSubmitAvatar
+);
+const popupDelete = new PopupWithDelete(".popup-delete", ({ card, cardId }) => {
+  api
+    .deleteCard(cardId)
+    .then(() => {
+      card.removeCard();
+      popupDelete.close();
+    })
+    .catch((error) => console.log(`Ошибка: ${error}`))
+    .finally();
+});
+
 popupEditProfile.setEventListeners();
 popupAddPlace.setEventListeners();
+popupAddAvatar.setEventListeners();
+popupDelete.setEventListeners();
 
 const imagePopup = new PopupWithImage(".popup-zoom");
 imagePopup.setEventListeners();
@@ -92,41 +111,92 @@ imagePopup.setEventListeners();
 const userInfo = new UserInfo({
   nameSelector: ".profile__name",
   aboutSelector: ".profile__subtitle",
+  avatarSelector: ".profile__avatar",
 });
 
 function createCard(item) {
-  const card = new Card(item, ".template", () => {
-    imagePopup.open(item);
-  });
+  const card = new Card(
+    item,
+    ".template",
+    () => {
+      imagePopup.open(item);
+    },
+    popupDelete.openPopup,
+    (likeButton, cardId) => {
+      if (likeButton.classList.contains("elements__like-button_active")) {
+        api
+          .removeLike(cardId)
+          .then((res) => {
+            card.toggleLike(res.likes);
+          })
+          .catch((error) => console.log(`Ошибка: ${error}`));
+      } else {
+        api
+          .addLike(cardId)
+          .then((res) => {
+            card.toggleLike(res.likes);
+          })
+          .catch((error) => console.log(`Ошибка: ${error}`));
+      }
+    }
+  );
   return card.generateCard();
 }
 
-const cardsContainer = new Section(
-  { data: initialCards, renderer: renderCard },
-  ".elements"
-);
-
-console.log(cardsContainer);
-cardsContainer.renderItems();
-
-function renderCard(item) {
-  const cardElement = createCard(item);
-  cardsContainer.addItem(cardElement);
-}
+const cardsContainer = new Section((element) => {
+  cardsContainer.addItem(createCard(element));
+}, ".elements");
 
 function handleFormSubmitCard(data) {
-  renderCard({
-    name: data.place__name,
-    link: data.place__link,
-  });
-  popupAddPlace.close();
+  Promise.all([api.getProfile(), api.setCard(data)])
+    .then(([dataUser, dataCard]) => {
+      dataCard.myid = dataUser._id;
+      cardsContainer.addItem(createCard(dataCard));
+      popupAddPlace.close();
+    })
+    .catch((error) => console.log(`Ошибка: ${error}`))
+    .finally(() => popupAddPlace.setButtonText());
 }
 
 function handleFormSubmitProfile(data) {
-  userInfo.setUserInfo({
-    name: data.edit__username,
-    about: data.edit__description,
-  });
-
+  api
+    .setProfile(data)
+    .then((res) => {
+      userInfo.setUserInfo({
+        name: res.name,
+        about: res.about,
+        avatar: res.avatar,
+      });
+    })
+    .catch((error) => console.log(`Ошибка: ${error}`))
+    .finally(() => popupEditProfile.setButtonText());
   popupEditProfile.close();
 }
+
+function handleFormSubmitAvatar(data) {
+  api
+    .setAvatarImg(data)
+    .then((res) => {
+      userInfo.setUserInfo({
+        name: res.name,
+        about: res.about,
+        avatar: res.avatar,
+      });
+    })
+    .catch((error) => console.log(`Ошибка: ${error}`))
+    .finally(() => popupAddAvatar.setButtonText());
+  popupAddAvatar.close();
+}
+
+Promise.all([api.getProfile(), api.getCards()])
+  .then(([dataUser, dataCard]) => {
+    userInfo.setUserInfo({
+      name: dataUser.name,
+      about: dataUser.about,
+      avatar: dataUser.avatar,
+    });
+    dataCard.forEach((element) => (element.myid = dataUser._id));
+    cardsContainer.renderItems(dataCard);
+    console.log(dataUser);
+  })
+  .catch((error) => console.log(`Ошибка: ${error}`));

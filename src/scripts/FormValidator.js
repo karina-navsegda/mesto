@@ -45,7 +45,6 @@ export class FormValidator {
     } else {
       this._enableButton();
     }
-    console.log(hasInvalidInput);
   }
 
   _disableButton() {
@@ -78,6 +77,5 @@ export class FormValidator {
       this._hideInputError(inputElement);
     });
     this._disableButton();
-    console.log("uuuuuu");
   }
 }
