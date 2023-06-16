@@ -1,6 +1,6 @@
 .profile__overlay-button {
   background-color: #000;
-  background-image: url("../../../images/VectorAvatar.svg"); 
+  background-image: url("../../../images/VectorAvatar.svg");
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -18,4 +18,3 @@
   opacity: 0.8;
   transition: opacity 0.3s ease-in-out;
 }
-
