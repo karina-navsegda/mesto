@@ -17,14 +17,6 @@ const api = new Api({
   },
 });
 
-api.getProfile().then((res) => {
-  userInfo.setUserInfo({
-    name: res.name,
-    about: res.about,
-    avatar: res.avatar,
-  });
-});
-
 const popupEdit = document.querySelector(".popup-edit");
 const popupPlace = document.querySelector(".popup-place");
 const popupAvatar = document.querySelector(".popup-profile");
@@ -35,9 +27,6 @@ const popupNewAvatar = document.querySelector(".profile__overlay-button");
 
 const nameInput = document.querySelector(".popup__item_type_username");
 const jobInput = document.querySelector(".popup__item_type_description");
-
-const imgInput = document.querySelector(".popup__item_type_link");
-const placeName = document.querySelector(".popup__item_type_place-name");
 
 const validationEnable = {
   formSelector: ".popup__form",
@@ -70,8 +59,6 @@ popupEditOpenButton.addEventListener("click", openPopupEdit);
 popupAddButton.addEventListener("click", function () {
   popupAddPlace.open();
   cardFormValidator.resetValidation();
-  imgInput.value = "";
-  placeName.value = "";
 });
 
 popupNewAvatar.addEventListener("click", function () {
@@ -114,7 +101,7 @@ const userInfo = new UserInfo({
   avatarSelector: ".profile__avatar",
 });
 
-function createCard(item) {
+ function createCard(item) {
   const card = new Card(
     item,
     ".template",
@@ -122,8 +109,9 @@ function createCard(item) {
       imagePopup.open(item);
     },
     popupDelete.openPopup,
-    (likeButton, cardId) => {
-      if (likeButton.classList.contains("elements__like-button_active")) {
+    (isLiked, cardId) => {
+     const liked = card.isLiked();
+      if (liked) {
         api
           .removeLike(cardId)
           .then((res) => {
@@ -141,16 +129,16 @@ function createCard(item) {
     }
   );
   return card.generateCard();
-}
-
+} 
+  
 const cardsContainer = new Section((element) => {
   cardsContainer.addItem(createCard(element));
 }, ".elements");
 
 function handleFormSubmitCard(data) {
-  Promise.all([api.getProfile(), api.setCard(data)])
-    .then(([dataUser, dataCard]) => {
-      dataCard.myid = dataUser._id;
+  Promise.all([api.setCard(data)])
+    .then(([dataCard]) => {
+      dataCard.myid = dataCard.owner._id;
       cardsContainer.addItem(createCard(dataCard));
       popupAddPlace.close();
     })
@@ -165,12 +153,13 @@ function handleFormSubmitProfile(data) {
       userInfo.setUserInfo({
         name: res.name,
         about: res.about,
-        avatar: res.avatar,
+        avatar: res.avatar
       });
+      popupEditProfile.close();
     })
     .catch((error) => console.log(`Ошибка: ${error}`))
     .finally(() => popupEditProfile.setButtonText());
-  popupEditProfile.close();
+
 }
 
 function handleFormSubmitAvatar(data) {
@@ -182,10 +171,11 @@ function handleFormSubmitAvatar(data) {
         about: res.about,
         avatar: res.avatar,
       });
+      popupAddAvatar.close();
     })
     .catch((error) => console.log(`Ошибка: ${error}`))
     .finally(() => popupAddAvatar.setButtonText());
-  popupAddAvatar.close();
+
 }
 
 Promise.all([api.getProfile(), api.getCards()])

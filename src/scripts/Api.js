@@ -63,9 +63,10 @@ addLike(cardId) {
         headers: {
             authorization: this._authorization
         }
-       
+    
     })
-    .then(res => res.ok ? res.json() : Promise.reject);
+    .then(res => res.ok ? res.json() : Promise.reject)
+  
 }
 
 removeLike(cardId) {
