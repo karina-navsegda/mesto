@@ -29,7 +29,9 @@ export class Card {
 
 _checkDeleteButton() {
 
- this._myId === this._ownerId ? this._deleteButton.style.display = 'block' : this._deleteButton.style.display = 'none'; 
+  if (this._myId != this._ownerId) {
+    this._deleteButton.remove();
+  }
 } 
 
   _getTemplate() {
@@ -40,6 +42,17 @@ _checkDeleteButton() {
 
     return cardElement;
   }
+
+  isLiked() {
+   /*const isLiked = this._likes.find((like) => {
+      return like._id === this._user;
+    })
+    return isLiked */
+   const liked = this._likeButton.classList.contains("elements__like-button_active");
+   console.log(liked);
+   return liked;
+ 
+  };
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", () => {
@@ -63,7 +76,6 @@ _checkDeleteButton() {
       }
     })
     this._likesCounter.textContent = this._likesCount;
-
   }
 
   _handleLikeIcon = () => {
@@ -77,8 +89,10 @@ _checkDeleteButton() {
   }
 
   toggleLike(likes) {
+    this._likes = likes;
     this._likeButton.classList.toggle('elements__like-button_active');
-    this._likesCounter.textContent = likes.length
+    this._likesCounter.textContent = likes.length;
+    console.log(likes.length);
   }
 
   removeCard() {
